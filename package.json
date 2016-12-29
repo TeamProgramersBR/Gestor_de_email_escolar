@@ -18,5 +18,12 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^1.4.1"
+  },
+  "dependencies": {
+    "angular": "^1.6.1",
+    "angular-route": "^0.0.0",
+    "angular-ui-router": "^0.0",
+    "firebase": "^3.6.4",
+    "pouchdb": "^6.1.0"
   }
 }
