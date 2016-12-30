@@ -1,31 +1,31 @@
 (function() {
   'use strict';
-  angular.module("EMAILAPP", ['ngRoute', 'ui.router'])
+  angular.module("EMAILAPP", ['ngRoute', 'ui.router','xeditable'])
   .controller('LOGINCTRL', function ($scope, $state) {
     // firebase config LOGIN
     var config = {
-      apiKey: "AIzaSyAAGQiJT8cAv88FauzeW1KjeV-TEv-R0tw",
-      authDomain: "mailsend-7d77e.firebaseapp.com",
-      databaseURL: "https://mailsend-7d77e.firebaseio.com",
-      storageBucket: "mailsend-7d77e.appspot.com",
-      messagingSenderId: "675543414386"
+      apiKey: "",
+      authDomain: "",
+      databaseURL: "",
+      storageBucket: "",
+      messagingSenderId: ""
     };
     firebase.initializeApp(config);
     // Verifica se usuário existe no firebase
     $scope.verificaLogin = function (usuario) {
       firebase.auth().signInWithEmailAndPassword(usuario.email, usuario.senha).catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // ...
-    });
-    var user = firebase.auth().currentUser;
-    console.log(user);
-    if (user != undefined) {
-      $state.go("home");
-    }else{
-      console.log("logou não");
-    }
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ...
+      });
+      var user = firebase.auth().currentUser;
+      console.log(user);
+      if (user != undefined) {
+        $state.go("home");
+      }else{
+        console.log("logou não");
+      }
     };
   })
   .run(function($banco,  $rootScope) {
@@ -64,9 +64,8 @@
     // salva um documento no banco.
     this.save = function(jsonDocument) {
       var deferred = $q.defer();
-      if (!jsonDocument._id) {
-        jsonDocument._id = new Date().toISOString();
-        database.put(jsonDocument).then(function(response) {
+      if(!jsonDocument._id) {
+        database.post(jsonDocument).then(function(response) {
           deferred.resolve(response);
         }).catch(function(error) {
           deferred.reject(error);
@@ -88,6 +87,13 @@
     this.get = function(documentId) {
       return database.get(documentId);
     }
+    // retorna todos registros
+    this.all = function () {
+      return database.allDocs({
+        include_docs: true,
+        attachments: true,
+      })
+    }
 
   }])
   .config(function($stateProvider, $urlRouterProvider) {
@@ -105,9 +111,25 @@
       url: "/cursos",
       templateUrl : "pages/curso/cursos.html",
       controller: "CURSOSCTRL"
+    }).state('cursoui',{
+      url: "/cursoui",
+      params: {cadastro: null},
+      templateUrl : "pages/curso/cursoui.html",
+      controller: "CURSOSCTRL"
     }).state('turmas',{
       url: "/turmas",
+      params: {curso: null},
       templateUrl : "pages/turma/turmas.html",
+      controller: "TURMACTRL"
+    }).state('turmaui',{
+      url: "/turmas",
+      params: {curso: null},
+      templateUrl : "pages/turma/turmaui.html",
+      controller: "TURMACTRL"
+    }).state('emailsturma',{
+      url: "/emailsturma",
+      params: {turma: null, curso : null},
+      templateUrl : "pages/turma/emailsturma.html",
       controller: "TURMACTRL"
     }).state('config',{
       url: "/config",

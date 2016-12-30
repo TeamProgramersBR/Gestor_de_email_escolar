@@ -1,50 +1,55 @@
-<div class="container-fluid">
+<div class="container-fluid" >
 	<div class="row">
 		<div class="col-md-2">
 
-			<button type="button" class="btn btn-block btn-default">
+			<button type="button" class="btn btn-block btn-default" ui-sref="cursoui">
 				Novo Curso
 			</button>
 		</div>
 		<div class="col-md-10">
-			<div class="jumbotron">
+			<div class="panel-collapse collapse in">
+				<div class="panel-body">
 
-			</div>
-			<table class="table table-bordered">
+			<table class="table table-bordered" ng-hide="cursos == undefined" style="background:white;">
 				<thead>
 					<tr>
 						<th>
 							#
 						</th>
 						<th>
-							Product
+							Curso
 						</th>
 						<th>
-							Payment Taken
+							Código do curso
 						</th>
-						<th>
-							Status
+						<th align="right">
+							Ações
 						</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
+					<tr ng-repeat="curso in cursos">
 						<td>
-							1
+
 						</td>
 						<td>
-							TB - Monthly
+								{{curso.doc.nome}}
 						</td>
 						<td>
-							01/04/2012
+								{{curso.doc.codigo}}
 						</td>
-						<td>
-							Default
+						<td align="right">
+								<button id="singlebutton" name="singlebutton" class="btn btn-primary" ui-sref="cursoui({'cadastro':curso.doc})">Editar</button>
+								<button id="singlebutton" name="singlebutton" class="btn btn-primary" ui-sref="turmas({'curso':curso.doc})">Controle de Turmas</button>
+
 						</td>
 					</tr>
 
 				</tbody>
 			</table>
+		</div>
+		</div>
+			<div ng-hide="cursos != undefined"><center ><h3>Ainda não há cursos cadastrados.</h3></center></div>
 		</div>
 	</div>
 </div>
