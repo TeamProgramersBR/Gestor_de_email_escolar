@@ -16,7 +16,6 @@
           }
         });
         $scope.cursos = temp;
-        console.log(temp);
         $scope.$apply();
       });
 

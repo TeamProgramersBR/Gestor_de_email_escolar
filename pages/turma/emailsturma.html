@@ -44,11 +44,12 @@
 			<div class="row">
 				<p style="heigth:10px;"></p>
 				<div class="col-md-3">
-					<button class="btn btn-success btn-block">Salvar lista de emails</button>
+					<button class="btn btn-success btn-block" ng-click="salvarEmails(cadastro)">Salvar lista de emails</button>
 				</div>
-				<div class="col-md-8">
+				<div class="col-md-9">
 					<div class="panel panel-default">
-						<table class="table">
+						{{emails}}
+						<table class="table" >
 							<thead>
 								<tr>
 									<th>
@@ -66,15 +67,15 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="pessoa in emails">
+								<tr ng-repeat="pessoa in turmadados.emails">
 									<td>
 										#
 									</td>
 									<td>
-										<a href="#" editable-text="pessoa.nome" e-label="User Name">{{pessoa.nome}}</a>
+										<a href="#" editable-text="pessoa.nome" e-label="Nome">{{pessoa.nome}}</a>
 									</td>
 									<td>
-										<a href="#" editable-text="pessoa.email" e-label="User Name">{{pessoa.email}}</a>
+										<a href="#" editable-text="pessoa.email" e-label="Email">{{pessoa.email}}</a>
 									</td>
 									<td>
 										<button class="btn btn-danger" ng-click="removeremail(pessoa)">Excluir</button>
@@ -82,6 +83,7 @@
 								</tr>
 							</tbody>
 						</table>
+
 					</div>
 				</div>
 			</div>

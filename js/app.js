@@ -106,7 +106,11 @@
     .state('home',{
       url: "/home",
       templateUrl : "pages/home.html",
-      controller: "HOMECTRL"
+      controller: "EMAILCTRL"
+    }).state('novoemail',{
+      url: "/novoemail",
+      templateUrl : "pages/email/novoemail.html",
+      controller: "EMAILCTRL"
     }).state('cursos',{
       url: "/cursos",
       templateUrl : "pages/curso/cursos.html",

@@ -1,0 +1,32 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-9">
+      <label for="textinput">Titulo do email</label>
+      <div class="input-group">
+        <span class="glyphicon glyphicon-pencil input-group-addon" id="basic-addon1"></span>
+        <input ng-model="email.titulo" type="text" class="form-control" placeholder="Titulo do email" aria-describedby="basic-addon1">
+      </div>
+      <div id="editorTexto" ng-model="email.corpo" style="background:white;"></div>
+      <div class="col-md-12">
+      </div>
+      <div class="input-group">
+          <!-- image-preview-input -->
+          <span class="glyphicon glyphicon-folder-open input-group-addon"></span>
+          <div class="btn btn-default">
+            <input type="file"  accept="image/png, image/jpeg, image/gif" name="input-file-preview"/> <!-- rename it -->
+          </div>
+          <button class="btn btn-default">Enviar aquivo</button>
+      </div>
+    </div>
+  </div>
+</div>
