@@ -59,6 +59,7 @@
         $scope.turmas = turmasExibir;
         $scope.$apply();
       });
+      
     });
 
   });

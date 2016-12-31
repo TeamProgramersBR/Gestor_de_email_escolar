@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-  angular.module("EMAILAPP", ['ngRoute', 'ui.router','xeditable'])
+  angular.module("EMAILAPP", ['ngRoute', 'ui.router','xeditable','file-model','isteven-multi-select'])
   .controller('LOGINCTRL', function ($scope, $state) {
     // firebase config LOGIN
     var config = {
@@ -142,5 +142,5 @@
     })
     ;
     $urlRouterProvider.otherwise("login");
-  })
+  });
 })();
