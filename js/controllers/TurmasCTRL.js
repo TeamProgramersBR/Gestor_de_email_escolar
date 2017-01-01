@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-  angular.module('EMAILAPP').controller('TURMACTRL', function($scope,$banco,$stateParams, $state){
+  angular.module('EMAILAPP').controller('TURMACTRL', function($scope,$banco,$stateParams, $state,toaster){
     //Variavel que recebe o curso.
     if($stateParams.curso != undefined)$scope.curso = $stateParams.curso;
     if($stateParams.curso != undefined)$scope.turma = $stateParams.turma;
@@ -25,21 +25,28 @@
       temp.cursoID = $scope.curso._id;
       temp.emails = $scope.turmadados.emails;
       temp.tipo = "emails";
-      $banco.save(temp);
+      $banco.save(temp).then(function () {
+        toaster.pop({type: 'success',title: 'Emails salvos com sucesso',body: 'Os emails foram atribuidos a turma',showCloseButton: true,timeout: 13000});
+      });
     }
     // remove email da lista
     $scope.removeremail = function (pessoa) {
-      for(var i = $scope.turmadados.emails.length; i--;) {
-        if($scope.turmadados.emails[i] === pessoa) {
-          $scope.turmadados.emails.splice(i, 1);
+      if (confirm("Tem certeza que deseja remover?")) {
+        for(var i = $scope.turmadados.emails.length; i--;) {
+          if($scope.turmadados.emails[i] === pessoa) {
+            $scope.turmadados.emails.splice(i, 1);
+          }
         }
+        toaster.pop({type: 'success',title: 'email removido com sucesso',body: 'O email foi removido com sucesso.',showCloseButton: true,timeout: 13000});
       }
     }
     //Salva e realiza update.
     $scope.salvar = function (cadastro,cursoID) {
       cadastro.tipo = "turma";
       cadastro.curso = cursoID;
-      $banco.save(cadastro);
+      $banco.save(cadastro).then(function () {
+        toaster.pop({type: 'success',title: 'Turma salva com sucesso',body: 'A inserção da turma ocorreu de forma esperada.',showCloseButton: true,timeout: 13000});
+      });
     }
 
     // traz todos as turmas
@@ -59,7 +66,7 @@
         $scope.turmas = turmasExibir;
         $scope.$apply();
       });
-      
+
     });
 
   });

@@ -1,4 +1,5 @@
 <div class="container-fluid">
+  <toaster-container></toaster-container>
   <div class="row">
     <div class="col-md-4">
     </div>
@@ -48,8 +49,7 @@
   </div>
 </div>
 <div style="margin-top:10px;"></div>
-  <a ng-click="enviarEmail()" class="btn btn-block btn-lg btn-primary"><span class="glyphicon glyphicon-send"></span> Enviar email</a>
-
+  <a ng-click="enviarEmail()"  class="btn btn-block btn-lg btn-primary"><span class="glyphicon glyphicon-send"></span> Enviar email</a>
 </div>
 <div class="col-md-9">
   <label for="textinput">Titulo do email</label>
@@ -82,7 +82,7 @@
     <tbody>
       <tr ng-repeat="file in listaArquivos">
         <td>
-          {{file.nome}}
+          {{file.filename}}
         </td>
         <td>
           <button class="btn btn-danger" ng-click="removerArquivo(file)">Excluir</button>
@@ -93,4 +93,3 @@
 </div>
 </div>
 </div>
-{{fileModel}}
