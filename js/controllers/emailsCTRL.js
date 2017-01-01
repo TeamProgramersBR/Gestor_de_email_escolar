@@ -2,6 +2,8 @@
   'use strict';
   angular.module('EMAILAPP').controller('EMAILCTRL', function($scope,$banco,$stateParams,toaster){
     // variavel que salva arquivos
+    $scope.liberado = true;
+
     $scope.listaArquivos = [];
     $scope.email = {};
     $.trumbowyg.svgPath = 'node_modules/trumbowyg/dist/ui/icons.svg';
@@ -99,7 +101,7 @@
     $scope.enviarEmail = function () {
       if($scope.email.titulo == undefined) {
         toaster.pop({type: 'error',title: 'Preecha o titulo do email',body: 'Falta preencher o titulo do email',showCloseButton: true});
-      }else if ($scope.enviarPara == undefined) {
+      }else if ($scope.turmasFiltro == undefined) {
         toaster.pop({type: 'error',title: 'Seleciona turmas',body: 'Selecione as turmas a qual o email sera enviado',showCloseButton: true});
       }else{
         var conf = {};
@@ -154,13 +156,33 @@
         mailOptions.attachments = $scope.listaArquivos;
       }
       // send mail with defined transport object
+
       transporter.sendMail(mailOptions, function(error, info){
       toaster.pop({type: 'info',title: 'Aguarde a mensagem de confirmação',body: 'Enviar o email pode demorar um pouco',showCloseButton: true,timeout: 3000});
         if(error){
           return console.log(error);
           toaster.pop({type: 'error',title: 'Houve um erro ao enviar o email',body: error,showCloseButton: true,timeout: 3000});
+        }else {
+          toaster.pop({type: 'success',title: 'Email foi enviado com sucesso',body: 'O email foi enviado para as turmas selecionadas',showCloseButton: true,timeout: 13000});
+            var turmasEnviadas = [];
+            var cursoEnviados = [];
+            angular.forEach($scope.cursosFilter, function (curso) {
+              cursoEnviados.push(curso._id);
+            });
+            angular.forEach($scope.turmasFiltro, function (turma) {
+              turmasEnviadas.push(turma._id);
+            });
+          var emailEnviado = {};
+          emailEnviado.email = mailOptions;
+          emailEnviado.turmas = turmasEnviadas;
+          emailEnviado.cursos = cursoEnviados;
+          emailEnviado.data = new Date();
+          emailEnviado.tipo = "emailEnviado";
+          $banco.save(emailEnviado).then(function (info) {
+            toaster.pop({type: 'success',title: 'Email foi salvo no banco de dados',body: 'O email fica disponivel para visualização na home do sistema',showCloseButton: true,timeout: 13000});
+          });
+
         }
-        toaster.pop({type: 'success',title: 'Email foi enviado com sucesso',body: 'O email foi enviado para as turmas selecionadas',showCloseButton: true,timeout: 13000});
         // console.log('Message sent: ' + info.response);
       });
     }

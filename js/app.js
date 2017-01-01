@@ -1,7 +1,33 @@
 (function() {
   'use strict';
   angular.module("EMAILAPP", ['ngRoute', 'ui.router','xeditable','file-model','isteven-multi-select','toaster', 'ngAnimate'])
-  .controller('LOGINCTRL', function ($scope, $state) {
+  .controller('LOGINCTRL', function ($scope, $state, $banco) {
+
+    // Verifica se usuário existe no firebase
+    $scope.verificaLogin = function (usuario) {
+      console.log(firebase);
+      firebase.auth().signInWithEmailAndPassword(usuario.email, usuario.senha).catch(function(error) {
+      });
+      var user = firebase.auth().currentUser;
+      if (user) {
+        localStorage.setItem("usuario",user);
+        $scope.liberado = true;
+      }
+      $state.go("home");
+    };
+
+    $scope.sair = function() {
+      firebase.auth().signOut().then(function() {
+        localStorage.removeItem("usuario");
+        $scope.liberado = false;
+        $state.go("login");
+      }, function(error) {
+        // An error happened.
+      });
+    }
+
+  })
+  .run(function($banco,  $rootScope) {
     // firebase config LOGIN
     var config = {
       apiKey: "",
@@ -11,28 +37,19 @@
       messagingSenderId: ""
     };
     firebase.initializeApp(config);
-    // Verifica se usuário existe no firebase
-    $scope.verificaLogin = function (usuario) {
-      firebase.auth().signInWithEmailAndPassword(usuario.email, usuario.senha).catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // ...
-      });
-      var user = firebase.auth().currentUser;
-      console.log(user);
-      if (user != undefined) {
-        $state.go("home");
-      }else{
-        console.log("logou não");
-      }
-    };
-  })
-  .run(function($banco,  $rootScope) {
     $banco.setDatabase("EMAILAPP");
 
   })
   .service("$banco",["$rootScope", "$q", function ($rootScope, $q) {
+    // Libera o menu ?
+    var liberado = false;
+    this.liberarAcesso = function (boo) {
+      console.log(boo);
+      liberado = boo;
+    }
+    this.getAcesso = function () {
+      return liberado;
+    }
     // seta o banco de dados.
     var database;
     this.setDatabase = function(databaseName) {
