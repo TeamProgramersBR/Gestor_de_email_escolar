@@ -40,6 +40,7 @@
     });
     // upload de arquivos
     $scope.upload = function () {
+
       $scope.listaArquivos.push({"nome":$scope.fileModel.name, "path": $scope.fileModel.path})
       $scope.fileModel = "";
     };
@@ -86,11 +87,26 @@
         };
 
         $scope.turmasAplicar = tempb;
-        console.log(JSON.stringify(tempb));
         $scope.$apply();
-
         ///
       });
-    }
+    };
+    //enviar email
+    $scope.enviarEmail = function () {
+      console.log($('#editorTexto').trumbowyg());
+      $scope.enviarPara = [];
+      $banco.all().then(function (documentos) {
+        angular.forEach(documentos.rows, function (documento) {
+          angular.forEach($scope.turmasFiltro, function (turm) {
+            if(documento.doc.tipo == "emails" && documento.doc.turmaID == turm._id){
+              $scope.enviarPara.push({"TURMA":turm._id,"emails":documento.doc.emails});
+            };
+          });
+        });
+        $scope.$apply();
+      });
+      console.log($scope.enviarPara);
+      var nodemailer = require('nodemailer');
+    };
   });
 })();
