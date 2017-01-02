@@ -16,7 +16,28 @@
   <body >
     <script src="js/customlibs/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="js/customlibs/jquery.min.js"><\/script>')</script>
-    <div  ng-include="'pages/menu.html'" ng-controller="LOGINCTRL"></div>
+    <nav class="navbar navbar-default" >
+      <div class="container-fluid" >
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#"><img alt="Brand" src="imgs/logomin.png" ></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-show="liberado">
+          <ul class="nav navbar-nav">
+            <li><a ui-sref="home">Home </a></li>
+            <li><a ui-sref="cursos">Cursos</a></li>
+            <li><a ui-sref="config">Configurações</a></li>
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            <li><button  ng-click="sair()" class="btn btn-default">Sair</button></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
     <section ui-view></section>
     <!-- importação de bibliotecas aqui -->
     <script src="node_modules/firebase/firebase.js"></script>

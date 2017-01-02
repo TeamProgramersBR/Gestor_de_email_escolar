@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid" ng-init="emailsEnviados()">
 	<div class="row">
 		<div class="col-md-2">
 
@@ -24,11 +24,23 @@
 							Para o(s) curso(s)
 						</th>
 						<th>
+							Data de envio
+						</th>
+						<th>
 							Ações
 						</th>
 					</tr>
 				</thead>
 				<tbody>
+					<tr ng-repeat="email in enviados">
+							<td></td>
+							<td>{{email.email.subject}}</td>
+							<td>{{email.cursos}}</td>
+							<td>{{email.data | date :  "dd/MM/y"}}</td>
+							<td>
+								<button class="btn btn-info btn-block">visualizar</button>
+							</td>
+				  <tr>
 
 
 				</tbody>
