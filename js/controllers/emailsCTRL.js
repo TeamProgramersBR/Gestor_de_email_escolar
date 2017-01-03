@@ -1,11 +1,19 @@
 (function() {
   'use strict';
   angular.module('EMAILAPP').controller('EMAILCTRL', function($scope,$banco,$stateParams,toaster){
+
+
+    console.log($banco.getAcesso());
+    if($banco.getAcesso() != null && localStorage.getItem("roload") == null) {
+      window.location.reload();
+      localStorage.setItem("roload","reload");
+    }
+
     // variavel que salva arquivos
     $scope.liberado = true;
-
-    $scope.listaArquivos = [];
     $scope.email = {};
+    $scope.listaArquivos = [];
+
     $.trumbowyg.svgPath = 'node_modules/trumbowyg/dist/ui/icons.svg';
     $('#editorTexto').trumbowyg({
       btnsDef: {
@@ -41,10 +49,19 @@
         }
       }
     });
+
+    // caso seja a visualização de um email já enviado
+    if ($stateParams.emaildata != undefined) {
+      var temp = $stateParams.emaildata;
+      $scope.email.titulo = temp.email.subject;
+      $scope.listaArquivos = temp.email.attachments;
+      $('#editorTexto').html(temp.email.html);
+    };
     // upload de arquivos
     $scope.upload = function () {
-      if($scope.fileModel.size >= 25600 ){
-        toaster.pop({type: 'error',title: 'O anexo e maior que o permitido',body: 'Por-favor apenas arquivos com menos de 25mb',showCloseButton: true});
+      console.log($scope.fileModel.size);
+      if($scope.fileModel.size >= 24545398 ){
+        toaster.pop({type: 'error',title: 'O anexo e maior que o permitido',body: 'Por-favor apenas arquivos com menos de 24mb',showCloseButton: true});
       }else{
         $scope.listaArquivos.push({"filename":$scope.fileModel.name, "path": $scope.fileModel.path})
       };
@@ -61,7 +78,7 @@
     // Todos documentos
     $scope.turmas = [];
     $banco.all().then(function (documentos) {
-      console.log(documentos);
+
       angular.forEach(documentos.rows, function (documento) {
         if(documento.doc.tipo == "curso") $scope.turmas.push(documento.doc);
         $scope.$apply();
@@ -75,7 +92,11 @@
         angular.forEach(documentos.rows, function (documento) {
           if(documento.doc.tipo == "turma"){
             for (var i = 0; i < $scope.turnosFilter.length; i++) {
-              if(documento.doc.turno == $scope.turnosFilter[i].turno) temp.push(documento.doc);
+              var dataI = new Date(documento.doc.datainicio);
+              var dataIFiltro = new Date($scope.email.dataInicioFiltro);
+              var dataF = new Date(documento.doc.dataconclusao);
+              var dataFFiltro = new Date($scope.email.dataFimFiltro);
+              if(documento.doc.turno == $scope.turnosFilter[i].turno && dataI.getTime() >= dataIFiltro.getTime() && dataF.getTime() <= dataFFiltro.getTime()) temp.push(documento.doc);
             };
           };
         });
@@ -134,78 +155,99 @@
     function email(config,listaDeEmails) {
       var nodemailer = require('nodemailer');
       // create reusable transporter object using the default SMTP transport
-      var smtpConfig = {
-        host: config.host,
-        port: config.port,
-        secure: config.ssl,
-        auth: {
-          user: config.user,
-          pass: config.password
+      var smtpConfig = null;
+      var transporter = null;
+      if (config.host == "smtp-mail.outlook.com") {
+        smtpConfig = {
+          host: config.host, // hostname
+          secureConnection: config.ssl, // TLS requires secureConnection to be false
+          port: config.port, // port for secure SMTP
+          tls: {
+            ciphers:'SSLv3'
+          },
+          auth: {
+            user: config.user,
+            pass: config.password
+          }
         }
-      };
-      var transporter = nodemailer.createTransport(smtpConfig)
-      // setup e-mail data with unicode symbols
-      var mailOptions = {
-        from: config.user, // sender address
-        to: listaDeEmails, // list of receivers
-        subject: $scope.email.titulo, // Subject line
-        text: '', // plaintext body
-        html: $('#editorTexto')[0].innerHTML+'<br><br><br>'+config.assinatura // html body
-      };
-      if($scope.listaArquivos.length >= 1){
-        mailOptions.attachments = $scope.listaArquivos;
+          transporter = nodemailer.createTransport(smtpConfig);
+        }else{
+          smtpConfig = {
+            host: config.host,
+            port: config.port,
+            secure: config.ssl,
+            auth: {
+              user: config.user,
+              pass: config.password
+            }
+          };
+          transporter = nodemailer.createTransport(smtpConfig);
+        }
+
+        // };
+
+        // setup e-mail data with unicode symbols
+        var mailOptions = {
+          from: config.user, // sender address
+          to: listaDeEmails, // list of receivers
+          subject: $scope.email.titulo, // Subject line
+          text: '', // plaintext body
+          html: $('#editorTexto')[0].innerHTML+'<br><br><br>'+config.assinatura // html body
+        };
+        if($scope.listaArquivos.length >= 1){
+          mailOptions.attachments = $scope.listaArquivos;
+        }
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions, function(error, info){
+          toaster.pop({type: 'info',title: 'Aguarde a mensagem de confirmação',body: 'Enviar o email pode demorar um pouco',showCloseButton: true,timeout: 3000});
+          if(error){
+            return console.log(error);
+            toaster.pop({type: 'error',title: 'Houve um erro ao enviar o email',body: error,showCloseButton: true,timeout: 3000});
+          }else {
+            toaster.pop({type: 'success',title: 'Email foi enviado com sucesso',body: 'O email foi enviado para as turmas selecionadas',showCloseButton: true,timeout: 13000});
+            var turmasEnviadas = [];
+            var cursoEnviados = [];
+            angular.forEach($scope.cursosFilter, function (curso) {
+              cursoEnviados.push(curso._id);
+            });
+            angular.forEach($scope.turmasFiltro, function (turma) {
+              turmasEnviadas.push(turma._id);
+            });
+            var emailEnviado = {};
+            emailEnviado.email = mailOptions;
+            emailEnviado.turmas = turmasEnviadas;
+            emailEnviado.cursos = cursoEnviados;
+            emailEnviado.data = new Date();
+            emailEnviado.tipo = "emailEnviado";
+            $banco.save(emailEnviado).then(function (info) {
+              toaster.pop({type: 'success',title: 'Email foi salvo no banco de dados',body: 'O email fica disponivel para visualização na home do sistema',showCloseButton: true,timeout: 13000});
+            });
+
+          }
+          // console.log('Message sent: ' + info.response);
+        });
       }
-      // send mail with defined transport object
-      transporter.sendMail(mailOptions, function(error, info){
-        toaster.pop({type: 'info',title: 'Aguarde a mensagem de confirmação',body: 'Enviar o email pode demorar um pouco',showCloseButton: true,timeout: 3000});
-        if(error){
-          return console.log(error);
-          toaster.pop({type: 'error',title: 'Houve um erro ao enviar o email',body: error,showCloseButton: true,timeout: 3000});
-        }else {
-          toaster.pop({type: 'success',title: 'Email foi enviado com sucesso',body: 'O email foi enviado para as turmas selecionadas',showCloseButton: true,timeout: 13000});
-          var turmasEnviadas = [];
-          var cursoEnviados = [];
-          angular.forEach($scope.cursosFilter, function (curso) {
-            cursoEnviados.push(curso._id);
-          });
-          angular.forEach($scope.turmasFiltro, function (turma) {
-            turmasEnviadas.push(turma._id);
-          });
-          var emailEnviado = {};
-          emailEnviado.email = mailOptions;
-          emailEnviado.turmas = turmasEnviadas;
-          emailEnviado.cursos = cursoEnviados;
-          emailEnviado.data = new Date();
-          emailEnviado.tipo = "emailEnviado";
-          $banco.save(emailEnviado).then(function (info) {
-            toaster.pop({type: 'success',title: 'Email foi salvo no banco de dados',body: 'O email fica disponivel para visualização na home do sistema',showCloseButton: true,timeout: 13000});
-          });
-
-        }
-        // console.log('Message sent: ' + info.response);
-      });
-    }
-    // Traz emails enviados
-    $scope.emailsEnviados = function () {
-      $scope.enviados = [];
-      $banco.all().then(function (documentos) {
-        angular.forEach(documentos.rows ,function (doc) {
-          if(doc.doc.tipo == "emailEnviado") $scope.enviados.push(doc.doc);
-        });
-        angular.forEach($scope.enviados, function (enviado) {
+      // Traz emails enviados
+      $scope.emailsEnviados = function () {
+        $scope.enviados = [];
+        $banco.all().then(function (documentos) {
           angular.forEach(documentos.rows ,function (doc) {
-            for (var i = 0; i < enviado.cursos.length; i++) {
-              if (doc.doc.tipo == "curso" && enviado.cursos[i] == doc.doc._id) enviado.cursos[i] = doc.doc.nome;
-            };
-            for (var i = 0; i < enviado.turmas.length; i++) {
-              if (doc.doc.tipo == "turma" && enviado.turmas[i] == doc.doc._id) enviado.turmas[i] = doc.doc.codigo;
-            };
+            if(doc.doc.tipo == "emailEnviado") $scope.enviados.push(doc.doc);
           });
+          angular.forEach($scope.enviados, function (enviado) {
+            angular.forEach(documentos.rows ,function (doc) {
+              for (var i = 0; i < enviado.cursos.length; i++) {
+                if (doc.doc.tipo == "curso" && enviado.cursos[i] == doc.doc._id) enviado.cursos[i] = doc.doc.nome;
+              };
+              for (var i = 0; i < enviado.turmas.length; i++) {
+                if (doc.doc.tipo == "turma" && enviado.turmas[i] == doc.doc._id) enviado.turmas[i] = doc.doc.codigo;
+              };
+            });
+          });
+          $scope.$apply();
         });
-        $scope.$apply();
-      });
-    }
+      }
 
 
-  });
-})();
+    });
+  })();

@@ -27,6 +27,7 @@
     "angularjs-toaster": "^2.1.0",
     "firebase": "^3.6.4",
     "jQuery": "^1.7.4",
+    "ng-table": "^3.0.1",
     "nodemailer": "^2.7.0",
     "pouchdb": "^6.1.0",
     "toastr": "^2.1.2",

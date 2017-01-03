@@ -4,6 +4,7 @@
     //Variavel que recebe o curso.
     if($stateParams.curso != undefined)$scope.curso = $stateParams.curso;
     if($stateParams.curso != undefined)$scope.turma = $stateParams.turma;
+    if ($state.current.name == "turmaui")$scope.cadastro = $stateParams.turma;
     // Voltar
     $scope.voltar = function () {
       window.history.back();
@@ -44,9 +45,12 @@
     $scope.salvar = function (cadastro,cursoID) {
       cadastro.tipo = "turma";
       cadastro.curso = cursoID;
-      $banco.save(cadastro).then(function () {
+      $banco.save(cadastro);
+      if (cadastro._id == undefined) {
         toaster.pop({type: 'success',title: 'Turma salva com sucesso',body: 'A inserção da turma ocorreu de forma esperada.',showCloseButton: true,timeout: 13000});
-      });
+      }else{
+        toaster.pop({type: 'success',title: 'Turma editada com sucesso',body: 'A edição da turma ocorreu de forma esperada.',showCloseButton: true,timeout: 13000});
+      }
     }
 
     // traz todos as turmas

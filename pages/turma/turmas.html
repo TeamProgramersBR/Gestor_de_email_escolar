@@ -39,13 +39,16 @@
 						</td>
 
 						<td>
-							{{turma.doc.datainicio}}
+							{{turma.doc.codigo}}
 						</td>
 						<td>
-							{{turma.doc.dataconclusao}}
+							{{turma.doc.datainicio | date:'dd/MM/y'}} -
+							{{turma.doc.dataconclusao | date:'dd/MM/y'}}
 						</td>
 						<td>
-							<button id="singlebutton" name="singlebutton" class="btn btn-block btn-primary" ui-sref="emailsturma({'turma':turma.doc, 'curso':curso})">Emails</button>
+							<a ui-sref="turmaui({'turma':turma.doc, 'curso':curso})" class="btn btn-default"><span class="glyphicon glyphicon-pencil" ></span> Editar turma</a>
+							<a ui-sref="emailsturma({'turma':turma.doc, 'curso':curso})" class="btn btn-primary"><span class="glyphicon glyphicon-inbox"></span> Controle de emails</a>
+							<!-- <button id="singlebutton" name="singlebutton" class="btn btn-block btn-primary">Emails</button> -->
 						</td>
 					</tr>
 

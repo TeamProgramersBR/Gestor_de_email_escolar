@@ -1,25 +1,34 @@
 (function() {
   'use strict';
-  angular.module("EMAILAPP", ['ngRoute', 'ui.router','xeditable','file-model','isteven-multi-select','toaster', 'ngAnimate'])
-  .controller('LOGINCTRL', function ($scope, $state, $banco) {
-
+  angular.module("EMAILAPP", ['ngRoute', 'ui.router','xeditable','file-model','isteven-multi-select','toaster', 'ngAnimate','ngTable'])
+  .controller('LOGINCTRL', function ($scope, $state, $banco,$rootScope) {
+    $("#menu").css("visibility", "hidden");
+    $scope.liberado = false;
     // Verifica se usuário existe no firebase
     $scope.verificaLogin = function (usuario) {
-      console.log(firebase);
+      localStorage.removeItem("roload");
       firebase.auth().signInWithEmailAndPassword(usuario.email, usuario.senha).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ...
       });
       var user = firebase.auth().currentUser;
       if (user) {
-        localStorage.setItem("usuario",user);
-        $scope.liberado = true;
+        localStorage.setItem("liberado", "liberado");
+        $state.go("home");
       }
-      $state.go("home");
     };
-
+    var user = firebase.auth().currentUser;
+    if (user) {
+      localStorage.setItem("liberado",true);
+      location.reload();
+      $state.go("home");
+    }
     $scope.sair = function() {
       firebase.auth().signOut().then(function() {
-        localStorage.removeItem("usuario");
-        $scope.liberado = false;
+        $rootScope.userL = undefined;
+        localStorage.removeItem("liberado");
         $state.go("login");
       }, function(error) {
         // An error happened.
@@ -28,17 +37,22 @@
 
   })
   .run(function($banco,  $rootScope) {
+    $rootScope.userL = $banco.getAcesso();
+    $rootScope.$watch('userL', function() {
+      console.log($rootScope.userL);
+      // 789joaopaulo@gmail.com
+        if($rootScope.userL == "liberado"){ $("#menu").css("visibility", "visible");}else{$("#menu").css("visibility", "visible");};
+    });
     // firebase config LOGIN
     var config = {
-      apiKey: "",
-      authDomain: "",
-      databaseURL: "",
-      storageBucket: "",
-      messagingSenderId: ""
+      apiKey: "AIzaSyAAGQiJT8cAv88FauzeW1KjeV-TEv-R0tw",
+      authDomain: "mailsend-7d77e.firebaseapp.com",
+      databaseURL: "https://mailsend-7d77e.firebaseio.com",
+      storageBucket: "mailsend-7d77e.appspot.com",
+      messagingSenderId: "675543414386"
     };
     firebase.initializeApp(config);
     $banco.setDatabase("EMAILAPP");
-
   })
   .service("$banco",["$rootScope", "$q", function ($rootScope, $q) {
     // Libera o menu ?
@@ -48,7 +62,7 @@
       liberado = boo;
     }
     this.getAcesso = function () {
-      return liberado;
+      return localStorage.getItem("liberado");
     }
     // seta o banco de dados.
     var database;
@@ -126,6 +140,7 @@
       controller: "EMAILCTRL"
     }).state('novoemail',{
       url: "/novoemail",
+      params: {emaildata: null},
       templateUrl : "pages/email/novoemail.html",
       controller: "EMAILCTRL"
     }).state('cursos',{
@@ -143,8 +158,8 @@
       templateUrl : "pages/turma/turmas.html",
       controller: "TURMACTRL"
     }).state('turmaui',{
-      url: "/turmas",
-      params: {curso: null},
+      url: "/turmaui",
+      params: {curso: null, turma: null},
       templateUrl : "pages/turma/turmaui.html",
       controller: "TURMACTRL"
     }).state('emailsturma',{

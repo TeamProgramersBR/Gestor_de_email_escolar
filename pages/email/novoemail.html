@@ -6,6 +6,7 @@
     <div class="col-md-4">
     </div>
     <div class="col-md-4">
+
     </div>
   </div>
   <div class="row">
@@ -33,6 +34,15 @@
         class="btn-block"
         >
       </div>
+
+      <label>Turmas com incio em</label>
+      <div class="input-group">
+        <input class="form-control input-md" ng-model="email.dataInicioFiltro" type="date" name="dataInicio">
+      </div>
+      <label>até o periodo de</label>
+      <div class="input-group">
+        <input class="form-control input-md" ng-model="email.dataFimFiltro" type="date" name="dataFim">
+      </div>
     </ng-change>
   </div>
   <label>Turma(s)</label>
@@ -49,13 +59,13 @@
   </div>
 </div>
 <div style="margin-top:10px;"></div>
-  <a ng-click="enviarEmail()"  class="btn btn-block btn-lg btn-primary"><span class="glyphicon glyphicon-send"></span> Enviar email</a>
+<a ng-click="enviarEmail()"  class="btn btn-block btn-lg btn-primary"><span class="glyphicon glyphicon-send"></span> Enviar email</a>
 </div>
 <div class="col-md-9">
   <label for="textinput">Titulo do email</label>
   <div class="input-group">
     <span class="glyphicon glyphicon-pencil input-group-addon" id="basic-addon1"></span>
-    <input ng-model="email.titulo" type="text" class="form-control" placeholder="Titulo do email" aria-describedby="basic-addon1">
+    <input ng-model="email.titulo"  type="text" class="form-control" placeholder="Titulo do email" >
   </div>
   <div id="editorTexto" ng-model="email.corpo" style="background:white;"></div>
   <div class="col-md-12">

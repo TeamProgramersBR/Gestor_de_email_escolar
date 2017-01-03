@@ -11,41 +11,42 @@
 
 			</div>
 			<div class="panel-group" id="panel-139326" style="background:white;">
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th>
-							#
-						</th>
-						<th>
-							Titulo
-						</th>
-						<th>
-							Para o(s) curso(s)
-						</th>
-						<th>
-							Data de envio
-						</th>
-						<th>
-							Ações
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="email in enviados">
+				<table class="table table-bordered" ng-table="vm.tableParams">
+					<thead>
+						<tr>
+							<th>
+								#
+							</th>
+							<th>
+								Titulo
+							</th>
+							<th>
+								Para o(s) curso(s)
+							</th>
+							<th>
+								Data de envio
+							</th>
+							<th>
+								Ações
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="email in enviados">
 							<td></td>
 							<td>{{email.email.subject}}</td>
-							<td>{{email.cursos}}</td>
+							<td filter="{ name: 'text'}" sortable="'email.cursos'">{{email.cursos}}</td>
 							<td>{{email.data | date :  "dd/MM/y"}}</td>
 							<td>
-								<button class="btn btn-info btn-block">visualizar</button>
+								<button class="btn btn-info btn-block " ui-sref="novoemail({emaildata: email})">visualizar</button>
 							</td>
-				  <tr>
+							<tr>
 
 
-				</tbody>
-			</table>
+							</tbody>
+						</table>
+					</div>
+
+				</div>
+			</div>
 		</div>
-	</div>
-	</div>
-</div>
