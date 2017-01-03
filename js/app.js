@@ -45,11 +45,11 @@
     });
     // firebase config LOGIN
     var config = {
-      apiKey: "AIzaSyAAGQiJT8cAv88FauzeW1KjeV-TEv-R0tw",
-      authDomain: "mailsend-7d77e.firebaseapp.com",
-      databaseURL: "https://mailsend-7d77e.firebaseio.com",
-      storageBucket: "mailsend-7d77e.appspot.com",
-      messagingSenderId: "675543414386"
+      apiKey: "",
+      authDomain: "",
+      databaseURL: "",
+      storageBucket: "",
+      messagingSenderId: ""
     };
     firebase.initializeApp(config);
     $banco.setDatabase("EMAILAPP");
