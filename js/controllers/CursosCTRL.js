@@ -7,6 +7,11 @@
     $scope.voltar = function () {
       window.history.back();
     }
+    $scope.query = {
+    order: 'name',
+    limit: 5,
+    page: 1
+  };
     // Listagem de cursos
       $banco.all().then(function (retorno) {
         var temp = [];

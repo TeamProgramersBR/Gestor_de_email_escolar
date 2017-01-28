@@ -1,5 +1,6 @@
 body {
-  background: #e8e7e7;
+  background-image: url('../imgs/backgroundB.jpg');
+  background-repeat: repeat;
 }
 .samebg {
   background: #e8e7e7;

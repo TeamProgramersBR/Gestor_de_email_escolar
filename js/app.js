@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-  angular.module("EMAILAPP", ['ngRoute', 'ui.router','xeditable','file-model','isteven-multi-select','toaster', 'ngAnimate','ngTable'])
+  angular.module("EMAILAPP", ['ngRoute','ngMaterial','md.data.table', 'ui.router','xeditable','file-model','isteven-multi-select','toaster', 'ngAnimate','ngTable'])
   .controller('LOGINCTRL', function ($scope, $state, $banco,$rootScope) {
     $("#menu").css("visibility", "hidden");
     $scope.liberado = false;
@@ -45,14 +45,15 @@
     });
     // firebase config LOGIN
     var config = {
-      apiKey: "AIzaSyAAGQiJT8cAv88FauzeW1KjeV-TEv-R0tw",
-      authDomain: "mailsend-7d77e.firebaseapp.com",
-      databaseURL: "https://mailsend-7d77e.firebaseio.com",
-      storageBucket: "mailsend-7d77e.appspot.com",
-      messagingSenderId: "675543414386"
+      apiKey: "",
+      authDomain: "",
+      databaseURL: "",
+      storageBucket: "",
+      messagingSenderId: ""
     };
     firebase.initializeApp(config);
     $banco.setDatabase("EMAILAPP");
+    $banco.sync("https://couchdb-ebc9a2.smileupps.com/gestorescolar");
   })
   .service("$banco",["$rootScope", "$q", function ($rootScope, $q) {
     // Libera o menu ?

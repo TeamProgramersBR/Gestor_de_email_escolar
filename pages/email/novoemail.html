@@ -1,3 +1,4 @@
+<p style="margin-top:70px;"></p>
 <div class="container-fluid">
   <toaster-container></toaster-container>
   <div class="row">
@@ -10,7 +11,11 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-3" style="
+    background: white;
+    border-radius: 5px;
+    padding: 15px;
+">
       <ng-change ng-click="aplicaFiltros()">
         <label>Seleciona o(s) curso(s)</label>
         <div
@@ -76,7 +81,7 @@
     <div class="btn btn-default">
       <input type="file" file-model='fileModel'  name="input-file-preview"/> <!-- rename it -->
     </div>
-    <button class="btn btn-default"  ng-click='upload()'>Enviar aquivo</button>
+    <button  style="margin-left:5px;"class="btn btn-danger"  ng-click='upload()'>Enviar aquivo</button>
   </div>
   <table class="table table-striped">
     <thead>

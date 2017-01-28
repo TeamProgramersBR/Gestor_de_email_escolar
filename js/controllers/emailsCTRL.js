@@ -2,7 +2,11 @@
   'use strict';
   angular.module('EMAILAPP').controller('EMAILCTRL', function($scope,$banco,$stateParams,toaster){
 
-
+    $scope.query = {
+    order: 'name',
+    limit: 5,
+    page: 1
+  };
     console.log($banco.getAcesso());
     if($banco.getAcesso() != null && localStorage.getItem("roload") == null) {
       window.location.reload();
@@ -170,84 +174,89 @@
             pass: config.password
           }
         }
-          transporter = nodemailer.createTransport(smtpConfig);
-        }else{
-          smtpConfig = {
-            host: config.host,
-            port: config.port,
-            secure: config.ssl,
-            auth: {
-              user: config.user,
-              pass: config.password
-            }
-          };
-          transporter = nodemailer.createTransport(smtpConfig);
-        }
-
-        // };
-
-        // setup e-mail data with unicode symbols
-        var mailOptions = {
-          from: config.user, // sender address
-          to: listaDeEmails, // list of receivers
-          subject: $scope.email.titulo, // Subject line
-          text: '', // plaintext body
-          html: $('#editorTexto')[0].innerHTML+'<br><br><br>'+config.assinatura // html body
-        };
-        if($scope.listaArquivos.length >= 1){
-          mailOptions.attachments = $scope.listaArquivos;
-        }
-        // send mail with defined transport object
-        transporter.sendMail(mailOptions, function(error, info){
-          toaster.pop({type: 'info',title: 'Aguarde a mensagem de confirmação',body: 'Enviar o email pode demorar um pouco',showCloseButton: true,timeout: 3000});
-          if(error){
-            return console.log(error);
-            toaster.pop({type: 'error',title: 'Houve um erro ao enviar o email',body: error,showCloseButton: true,timeout: 3000});
-          }else {
-            toaster.pop({type: 'success',title: 'Email foi enviado com sucesso',body: 'O email foi enviado para as turmas selecionadas',showCloseButton: true,timeout: 13000});
-            var turmasEnviadas = [];
-            var cursoEnviados = [];
-            angular.forEach($scope.cursosFilter, function (curso) {
-              cursoEnviados.push(curso._id);
-            });
-            angular.forEach($scope.turmasFiltro, function (turma) {
-              turmasEnviadas.push(turma._id);
-            });
-            var emailEnviado = {};
-            emailEnviado.email = mailOptions;
-            emailEnviado.turmas = turmasEnviadas;
-            emailEnviado.cursos = cursoEnviados;
-            emailEnviado.data = new Date();
-            emailEnviado.tipo = "emailEnviado";
-            $banco.save(emailEnviado).then(function (info) {
-              toaster.pop({type: 'success',title: 'Email foi salvo no banco de dados',body: 'O email fica disponivel para visualização na home do sistema',showCloseButton: true,timeout: 13000});
-            });
-
+        transporter = nodemailer.createTransport(smtpConfig);
+      }else{
+        smtpConfig = {
+          host: config.host,
+          port: config.port,
+          secure: config.ssl,
+          auth: {
+            user: config.user,
+            pass: config.password
           }
-          // console.log('Message sent: ' + info.response);
-        });
+        };
+        transporter = nodemailer.createTransport(smtpConfig);
       }
-      // Traz emails enviados
-      $scope.emailsEnviados = function () {
-        $scope.enviados = [];
-        $banco.all().then(function (documentos) {
+
+      // };
+
+      // setup e-mail data with unicode symbols
+      var mailOptions = {
+        from: config.user, // sender address
+        to: listaDeEmails, // list of receivers
+        subject: $scope.email.titulo, // Subject line
+        text: '', // plaintext body
+        html: $('#editorTexto')[0].innerHTML+'<br><br><br>'+config.assinatura // html body
+      };
+      if($scope.listaArquivos.length >= 1){
+        mailOptions.attachments = $scope.listaArquivos;
+      }
+      // send mail with defined transport object
+      transporter.sendMail(mailOptions, function(error, info){
+        toaster.pop({type: 'info',title: 'Aguarde a mensagem de confirmação',body: 'Enviar o email pode demorar um pouco',showCloseButton: true,timeout: 3000});
+        if(error){
+          return console.log(error);
+          toaster.pop({type: 'error',title: 'Houve um erro ao enviar o email',body: error,showCloseButton: true,timeout: 3000});
+        }else {
+          toaster.pop({type: 'success',title: 'Email foi enviado com sucesso',body: 'O email foi enviado para as turmas selecionadas',showCloseButton: true,timeout: 13000});
+          var turmasEnviadas = [];
+          var cursoEnviados = [];
+          angular.forEach($scope.cursosFilter, function (curso) {
+            cursoEnviados.push(curso._id);
+          });
+          angular.forEach($scope.turmasFiltro, function (turma) {
+            turmasEnviadas.push(turma._id);
+          });
+          var emailEnviado = {};
+          emailEnviado.email = mailOptions;
+          emailEnviado.turmas = turmasEnviadas;
+          emailEnviado.cursos = cursoEnviados;
+          emailEnviado.data = new Date();
+          emailEnviado.tipo = "emailEnviado";
+          $banco.save(emailEnviado).then(function (info) {
+            toaster.pop({type: 'success',title: 'Email foi salvo no banco de dados',body: 'O email fica disponivel para visualização na home do sistema',showCloseButton: true,timeout: 13000});
+          });
+
+        }
+        // console.log('Message sent: ' + info.response);
+      });
+    }
+    // Traz emails enviados
+    $scope.emailsEnviados = function () {
+      $scope.enviados = [];
+      $banco.all().then(function (documentos) {
+        angular.forEach(documentos.rows ,function (doc) {
+          if(doc.doc.tipo == "emailEnviado") $scope.enviados.push(doc.doc);
+        });
+        angular.forEach($scope.enviados, function (enviado) {
           angular.forEach(documentos.rows ,function (doc) {
-            if(doc.doc.tipo == "emailEnviado") $scope.enviados.push(doc.doc);
+            for (var i = 0; i < enviado.cursos.length; i++) {
+              if (doc.doc.tipo == "curso" && enviado.cursos[i] == doc.doc._id) enviado.cursos[i] = doc.doc.nome;
+            };
+            for (var i = 0; i < enviado.turmas.length; i++) {
+              if (doc.doc.tipo == "turma" && enviado.turmas[i] == doc.doc._id) enviado.turmas[i] = doc.doc.codigo;
+            };
           });
-          angular.forEach($scope.enviados, function (enviado) {
-            angular.forEach(documentos.rows ,function (doc) {
-              for (var i = 0; i < enviado.cursos.length; i++) {
-                if (doc.doc.tipo == "curso" && enviado.cursos[i] == doc.doc._id) enviado.cursos[i] = doc.doc.nome;
-              };
-              for (var i = 0; i < enviado.turmas.length; i++) {
-                if (doc.doc.tipo == "turma" && enviado.turmas[i] == doc.doc._id) enviado.turmas[i] = doc.doc.codigo;
-              };
-            });
-          });
-          $scope.$apply();
         });
+        $scope.$apply();
+      });
+    }
+    ///
+    $scope.config = {
+        itemsPerPage: 1,
+        fillLastPage: true
       }
 
 
-    });
-  })();
+  });
+})();

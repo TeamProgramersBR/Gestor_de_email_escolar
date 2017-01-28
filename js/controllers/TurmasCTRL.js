@@ -3,8 +3,14 @@
   angular.module('EMAILAPP').controller('TURMACTRL', function($scope,$banco,$stateParams, $state,toaster){
     //Variavel que recebe o curso.
     if($stateParams.curso != undefined)$scope.curso = $stateParams.curso;
+    console.log($stateParams.curso);
     if($stateParams.curso != undefined)$scope.turma = $stateParams.turma;
     if ($state.current.name == "turmaui")$scope.cadastro = $stateParams.turma;
+    $scope.query = {
+    order: 'name',
+    limit: 5,
+    page: 1
+  };
     // Voltar
     $scope.voltar = function () {
       window.history.back();
