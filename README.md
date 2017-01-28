@@ -19,9 +19,9 @@ npm install
 # Run the app
 npm start
 ```
-## app.js
+## js/app.js
 da linha 32 até linha 38 ficam a configurações de acesso ao google firebase
 Você precisa configurar essa parte caso queira utilizar o serviço de autenticação.
-
+O software somente funcionara de forma correta se você configurar uma forma te autenticação pelo firebase
 #### License [CC0 1.0 (Public Domain)](LICENSE.md)
 # Gestor_de_email_escolar
