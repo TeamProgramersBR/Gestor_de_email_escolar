@@ -1,5 +1,5 @@
 {
-  "name": "Gestor de emails",
+  "name": "gestor_de_emails",
   "description": "A minimal Electron application",
   "main": "main.js",
   "authors": [
