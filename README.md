@@ -18,10 +18,12 @@ cd Gestor_de_email_escolar
 npm install
 # Rode o projeto
 npm start
-``
+```
 # capturas de tela do software.
+
+#### License [CC0 1.0 (Public Domain)](LICENSE.md)
+
 ![Figura 01](https://raw.githubusercontent.com/TeamProgramersBR/Gestor_de_email_escolar/master/imgs/01.png)
 ![Figura 02](https://github.com/TeamProgramersBR/Gestor_de_email_escolar/blob/master/imgs/02.png?raw=true)
 ![Figura 03](https://github.com/TeamProgramersBR/Gestor_de_email_escolar/blob/master/imgs/03.png?raw=true)
 ![Figura 04](https://github.com/TeamProgramersBR/Gestor_de_email_escolar/blob/master/imgs/04.png?raw=true)
-#### License [CC0 1.0 (Public Domain)](LICENSE.md)
