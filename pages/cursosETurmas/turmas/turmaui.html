@@ -1,0 +1,134 @@
+<div class="container-fluid white-bg margin-10">
+	<div class="row " >
+		<div class="col-md-6">
+			<h3 class="text-center">
+				{{(cadastro._id == undefined) ? 'Cadastrar nova turma': 'Editar turma '+turma}} Para o curso <b><i>"{{curso.nomeDoCurso}}"</i></b>
+			</h3>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-6">
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-6">
+							<a ui-sref="turma({curso:curso})" class="btn btn-warning btn-block"><span class="glyphicon glyphicon-fast-backward"></span> Voltar</a>
+						</div>
+						<div class="col-md-6">
+							<a ng-click="salvar(cadastro)" class="btn btn-success btn-block"><span class="glyphicon glyphicon-floppy-saved"></span> Salvar</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-md-4">
+
+			<form class="form-horizontal">
+				<fieldset>
+					<!-- Text input-->
+					<div class="form-group">
+						<input type="hidden" ng-model="cadastro._id">
+						<div class="col-md-12">
+							<label  for="nome">Atrelado ao curso</label>
+							<input id="nome" name="nome" type="text" ng-value="curso.nomeDoCurso" placeholder="Nome do curso" class="form-control input-md" required=""  readonly="">
+
+						</div>
+					</div>
+					<!-- Text input-->
+					<div class="form-group">
+						<div class="col-md-12">
+							<label class="control-label" for="nome">Número da turma</label>
+							<input id="nome" name="nome" type="text" ng-model="cadastro.codigo" placeholder="Número da turma" class="form-control input-md" required="">
+						</div>
+					</div>
+
+					<!-- Text input-->
+					<div class="form-group">
+						<input type="hidden" ng-model="cadastro._id">
+						<div class="col-md-12">
+							<label class="control-label" for="nome">Data de inicio</label>
+							<input id="nome" name="nome" type="date" ng-model="cadastro.datainicio"  ng-value="cadastro.datainicio | date:'yyyy-MM-dd'" placeholder="Nome do curso" class="form-control input-md" required="">
+						</div>
+					</div>
+					<!-- Text input-->
+					<div class="form-group">
+						<input type="hidden" ng-model="cadastro._id">
+						<div class="col-md-12">
+							<label class="control-label" for="nome">Data de conclusão</label>
+							<input id="nome" name="nome" type="date" ng-model="cadastro.dataconclusao"  ng-value="cadastro.dataconclusao | date:'yyyy-MM-dd'" placeholder="Nome do curso" class="form-control input-md" required="">
+						</div>
+					</div>
+					<!-- Text input-->
+					<div class="form-group">
+						<div class="col-md-12">
+							<label class="control-label" for="codigo">Turno da turma</label>
+							<select id="selectbasic" name="selectbasic" class="form-control" ng-model="cadastro.turno">
+								<option >--Selecione--</option>
+								<option value="Matutino">Matutino</option>
+								<option value="Vespertino">Vespertino</option>
+								<option value="Noturno">Noturno</option>
+							</select>
+
+						</div>
+					</div>
+
+				</fieldset>
+			</form>
+
+		</div>
+		<div class="col-md-8">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-md-4">
+							<label for="">Nome</label>
+							<input type="text"  class="form-control" ng-model="email.nome" name="name" value="">
+						</div>
+						<div class="col-md-4">
+							<label for="">Endereço de email</label>
+							<input type="email"  class="form-control" ng-model="email.endereco" name="name" value="" required="">
+						</div>
+						<div class="col-md-4">
+							<label for="" class="margin-10"></label>
+							<button ng-click="adicionaremail(email)" type="button" class="btn btn-default btn-block"  name="button">Adicionar</button>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="input-group" style="padding:10px;">
+						<input type="text" ng-model="pesquisa" class="form-control input-xs" placeholder="Pesquisar" aria-describedby="basic-addon2">
+						<span class="input-group-addon" id="basic-addon2"><span class="glyphicon glyphicon-search"></span></span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<md-table-container>
+					  <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+					    <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+					      <tr md-row>
+					        <th md-column md-numeric>Nome</th>
+					        <th md-column md-numeric>Endereço de email</th>
+					        <th md-column md-numeric>Ações</th>
+					      </tr>
+					    </thead>
+					    <tbody md-body>
+					      <tr md-row md-select="dessert" md-select-id="name" md-auto-select ng-repeat="dessert in cadastro.emails | filter: pesquisa">
+					        <td md-cell>{{dessert.nome}}</td>
+					        <td md-cell>{{dessert.endereco}}</td>
+					        <td md-cell><button type="button" class="btn btn-block" ng-click="removerEmail(dessert)" name="button">Excluir</button></td>
+					      </tr>
+					    </tbody>
+					  </table>
+					</md-table-container>
+					<md-table-pagination md-limit="query.limit" md-limit-options="[5, 10, 15]" md-page="query.page" md-total="{{cadastro.emails.count}}" md-on-paginate="getDesserts" md-page-select></md-table-pagination>
+				</div>
+			</div>
+		</div>
+		<!-- <div class="col-md-4">
+	</div> -->
+</div>
+</div>

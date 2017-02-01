@@ -1,0 +1,89 @@
+<style media="screen">
+  .trumbowyg-box{
+        height: 100px;
+  }
+</style>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-4 white-bg">
+          <h3 class="text-center">
+            Configurar o sistema!
+          </h3>
+          <label for="textinput">Usuário do Gestor de email</label>
+          <div class="input-group">
+            <span class="input-group-addon glyphicon glyphicon-user" id="basic-addon1"></span>
+            <input ng-model="configuracao.userarioGestor" type="text" class="form-control" placeholder="Nome de usuário" aria-describedby="basic-addon1">
+          </div>
+
+          <label for="textinput">Senha do Gestor de email</label>
+          <div class="input-group">
+            <span class="input-group-addon glyphicon glyphicon-asterisk" id="basic-addon1"></span>
+            <input ng-model="configuracao.senhaGestor" type="password" class="form-control" placeholder="Senha" aria-describedby="basic-addon1">
+          </div>
+
+          <label for="textinput">Nome</label>
+          <div class="input-group">
+            <span class="input-group-addon glyphicon glyphicon-book" id="basic-addon1"></span>
+            <input ng-model="configuracao.nomeE" type="text" class="form-control" placeholder="Nome do email" aria-describedby="basic-addon1">
+          </div>
+          <label for="textinput">Email</label>
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">@</span>
+            <input ng-model="configuracao.user" type="text" class="form-control" placeholder="Endereço de email" aria-describedby="basic-addon1">
+          </div>
+          <label for="textinput">Senha</label>
+          <div class="input-group">
+            <span class="glyphicon glyphicon-asterisk input-group-addon" id="basic-addon1"></span>
+            <input ng-model="configuracao.password" type="password" class="form-control" placeholder="Senha do email" aria-describedby="basic-addon1">
+          </div>
+          <label for="textinput">Servidor SMTP</label>
+          <div class="input-group">
+            <span class="glyphicon glyphicon-inbox input-group-addon" id="basic-addon1"></span>
+            <input ng-model="configuracao.host" type="text" class="form-control" placeholder="Endereço do servidor SMTP" aria-describedby="basic-addon1">
+          </div>
+          <label for="textinput">Porta SMTP</label>
+          <div class="input-group">
+            <span class="glyphicon glyphicon-exclamation-sign input-group-addon" id="basic-addon1"></span>
+            <input ng-model="configuracao.port" type="text" class="form-control" placeholder="Porta do servidor SMTP" aria-describedby="basic-addon1">
+          </div>
+
+
+        </div>
+        <div class="col-md-4  white-bg">
+          <label for="textinput">Usar SSL</label>
+          <div class="input-group">
+            <span class="glyphicon glyphicon-exclamation-sign input-group-addon" id="basic-addon1"></span>
+            <select ng-model="configuracao.ssl" id="selectbasic" name="selectbasic" class="form-control">
+              <option value="true" selected="">Sim</option>
+              <option value="false">Não</option>
+            </select>
+          </div>
+          <label for="textinput">Assinatura de email</label>
+
+            <div id="assinatura" style="background:rgba(128, 128, 128, 0.11);" ></div>
+            <div class="col-md-12 pull-right'" style="text-align: right;">
+              <br>
+              <a ng-click="salvar(configuracao)" class="btn btn-success  "><span class="glyphicon glyphicon-ok-sign"></span> Concluir</a>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+
+    </div>
+    <div class="col-md-4">
+    </div>
+  </div>
+</div>

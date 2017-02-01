@@ -1,0 +1,25 @@
+<nav class="navbar navbar-default" ng-controller="loginCTRL">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Menu</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Gestor de email</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-if="libearmenu">
+      <ul class="nav navbar-nav">
+        <li ><a ui-sref="inicio"> Inicio </a></li>
+        <li><a ui-sref="curso">Controle de cursos & turmas</a></li>
+        <li><a ui-sref="configuracoes">Configurações</a></li>
+
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a ng-click="sair()">sair</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>

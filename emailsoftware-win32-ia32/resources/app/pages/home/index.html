@@ -1,0 +1,71 @@
+<div class="container-fluid white-bg margin-10">
+	<div class="row">
+		<div class="col-md-2">
+			<a ui-sref="escreveremail" class="btn btn-success margin-10" style="margin-top:26px;"><span class="glyphicon glyphicon-send"></span> Escrever novo email</a>
+		</div>
+		<div class="col-md-10">
+			<div class="row">
+
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-md-8">
+							<label for="">Pesquisar</label>
+							<div class="input-group">
+								<input type="text" ng-model="pesquisa" class="form-control" placeholder="Pesquisar" aria-describedby="basic-addon2">
+								<span class="input-group-addon" id="basic-addon2"><span class="glyphicon glyphicon-search"></span></span>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<label for="">Filtrar por curso</label>
+							<select class="form-control"  ng-model="filtroCurso"name="">
+								<option ng-repeat="object in listaCursos" ng-value="object._id">{{object.nomeDoCurso}}</option>
+							</select>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-md-12">
+
+					<md-table-container>
+						<table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+							<thead md-head >
+								<th md-column>
+									<b><h4>#</h4></b>
+								</th>
+								<th md-column>
+									<b><h4>Titulo</h4></b>
+								</th>
+								<th md-column>
+									<b><h4>Data de envio</h4></b>
+								</th>
+								<th md-column>
+									<b><h4>Cursos</h4></b>
+								</th>
+								<th md-column>
+									<b><h4>Ações</h4></b>
+								</th>
+							</tr>
+						</thead>
+						<tbody md-body>
+							<tr md-row md-select="dessert" md-select-id="name" md-auto-select ng-repeat="objeto in emailsenviados | filter : pesquisa | orderBy:'-data'">
+								<td md-cell>#</td>
+								<td md-cell>{{objeto.email.subject}}</td>
+								<td md-cell>{{objeto.data | date :  "dd/MM/y"}}</td>
+								<td md-cell> <b ng-repeat="curso in objeto.cursos">{{curso.nomeDoCurso+" "}}</b></td>
+								<td>
+									<button class="btn btn-info " ui-sref="escreveremail({email: objeto})">visualizar</button>
+									<a ng-click="deletar(objeto)" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</md-table-container>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
